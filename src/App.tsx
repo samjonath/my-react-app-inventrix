@@ -4,8 +4,8 @@ import { ItemForm } from './components/ItemForm';
 import { SuccessModal } from './components/SuccessModal';
 import { api } from './services/api';
 import { Item } from './types';
-import { MantineProvider, createTheme } from '@mantine/core';
-import { IconBoxSeam } from '@tabler/icons-react';
+import { MantineProvider, createTheme, HoverCard, Text } from '@mantine/core';
+import { IconBoxSeam, IconInfoCircle } from '@tabler/icons-react';
 
 const theme = createTheme({});
 
@@ -18,6 +18,7 @@ function App() {
   const itemsPerPage = 6; // You can adjust this number
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+  const [showTooltip, setShowTooltip] = useState(false);
 
   useEffect(() => {
     fetchItems();
@@ -144,7 +145,43 @@ function App() {
   return (
     <MantineProvider theme={theme}>
       <div className="min-h-screen bg-gray-100 py-8 px-4">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-6xl mx-auto relative">
+          <div className="absolute top-0 right-0 z-50">
+            <div 
+              className="relative"
+              onMouseEnter={() => setShowTooltip(true)}
+              onMouseLeave={() => setShowTooltip(false)}
+            >
+              <div className="cursor-help">
+                <IconInfoCircle
+                  size={24}
+                  className="text-blue-500 hover:text-blue-600 transition-colors"
+                  stroke={1.5}
+                />
+              </div>
+              
+              {showTooltip && (
+                <div 
+                  className="absolute right-0 mt-2 w-64 p-3 bg-white rounded-lg shadow-lg border border-gray-200 z-50"
+                  style={{
+                    transform: 'translateY(8px)'
+                  }}
+                >
+                  <div className="flex items-start gap-2">
+                    <IconInfoCircle 
+                      size={20} 
+                      className="text-blue-500 flex-shrink-0 mt-0.5" 
+                      stroke={1.5}
+                    />
+                    <p className="text-sm text-gray-700 leading-snug">
+                      Can't edit newly added items since we are working with mock APIs
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+          
           <div className="flex items-center justify-center gap-3 mb-8">
             <IconBoxSeam 
               size={40} 

@@ -9,6 +9,11 @@ interface ItemFormProps {
 export const ItemForm: React.FC<ItemFormProps> = ({ onSubmit, editingItem }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [titleError, setTitleError] = useState('');
+  const [descriptionError, setDescriptionError] = useState('');
+
+  const TITLE_MAX_LENGTH = 50;
+  const DESCRIPTION_MAX_LENGTH = 200;
 
   useEffect(() => {
     if (editingItem) {
@@ -17,11 +22,33 @@ export const ItemForm: React.FC<ItemFormProps> = ({ onSubmit, editingItem }) => 
     }
   }, [editingItem]);
 
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newTitle = e.target.value;
+    if (newTitle.length <= TITLE_MAX_LENGTH) {
+      setTitle(newTitle);
+      setTitleError('');
+    } else {
+      setTitleError(`Title must be ${TITLE_MAX_LENGTH} characters or less`);
+    }
+  };
+
+  const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newDescription = e.target.value;
+    if (newDescription.length <= DESCRIPTION_MAX_LENGTH) {
+      setDescription(newDescription);
+      setDescriptionError('');
+    } else {
+      setDescriptionError(`Description must be ${DESCRIPTION_MAX_LENGTH} characters or less`);
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({ title, description });
-    setTitle('');
-    setDescription('');
+    if (title.trim() && description.trim()) {
+      onSubmit({ title: title.trim(), description: description.trim() });
+      setTitle('');
+      setDescription('');
+    }
   };
 
   return (
@@ -30,26 +57,42 @@ export const ItemForm: React.FC<ItemFormProps> = ({ onSubmit, editingItem }) => 
         <label htmlFor="title" className="block text-gray-700 font-bold mb-2">
           Title
         </label>
-        <input
-          type="text"
-          id="title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          required
-        />
+        <div className="relative">
+          <input
+            type="text"
+            id="title"
+            value={title}
+            onChange={handleTitleChange}
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
+          <div className="absolute right-2 bottom-2 text-sm text-gray-500">
+            {title.length}/{TITLE_MAX_LENGTH}
+          </div>
+        </div>
+        {titleError && (
+          <p className="mt-1 text-sm text-red-500">{titleError}</p>
+        )}
       </div>
       <div className="mb-4">
         <label htmlFor="description" className="block text-gray-700 font-bold mb-2">
           Description
         </label>
-        <textarea
-          id="description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          required
-        />
+        <div className="relative">
+          <textarea
+            id="description"
+            value={description}
+            onChange={handleDescriptionChange}
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[100px]"
+            required
+          />
+          <div className="absolute right-2 bottom-2 text-sm text-gray-500">
+            {description.length}/{DESCRIPTION_MAX_LENGTH}
+          </div>
+        </div>
+        {descriptionError && (
+          <p className="mt-1 text-sm text-red-500">{descriptionError}</p>
+        )}
       </div>
       <button
         type="submit"

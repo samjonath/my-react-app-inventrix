@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Item } from '../types';
-import { Paper, Text, Button, Group, Title, Badge } from '@mantine/core';
-import { IconEdit, IconTrash, IconClock } from '@tabler/icons-react';
+import { Paper, Text, Button, Group, Title, Badge, Select, Modal } from '@mantine/core';
+import { IconEdit, IconTrash, IconClock, IconSortAscending, IconSortDescending, IconX } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
+import { MantineTheme } from '@mantine/core';
+import { createPortal } from 'react-dom';
 
 interface ItemListProps {
   items: Item[];
@@ -27,6 +29,21 @@ export const ItemList: React.FC<ItemListProps> = ({
   sortOrder,
   onSortChange
 }) => {
+  const [selectedItem, setSelectedItem] = useState<Item | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isModalOpen]);
+
   const totalPages = Math.ceil(items.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedItems = items.slice(startIndex, startIndex + itemsPerPage);
@@ -64,6 +81,77 @@ export const ItemList: React.FC<ItemListProps> = ({
     return rangeWithDots;
   };
 
+  const handleItemClick = (item: Item, e: React.MouseEvent) => {
+    if ((e.target as HTMLElement).closest('button')) {
+      return;
+    }
+    setSelectedItem(item);
+    setIsModalOpen(true);
+  };
+
+  const CustomModal = () => {
+    if (!isModalOpen) return null;
+
+    return createPortal(
+      <div className="fixed inset-0 z-50 flex items-center justify-center">
+        {/* Overlay */}
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm"
+          onClick={() => setIsModalOpen(false)}
+        />
+        
+        {/* Modal Content */}
+        <div className="relative bg-white rounded-lg shadow-xl w-full max-w-2xl mx-4 max-h-[90vh] overflow-hidden z-50">
+          {/* Header */}
+          <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
+            <h2 className="text-xl font-semibold text-gray-800">
+              Item Details
+            </h2>
+            <button
+              onClick={() => setIsModalOpen(false)}
+              className="text-gray-500 hover:text-gray-700 transition-colors"
+            >
+              <IconX size={20} />
+            </button>
+          </div>
+
+          {/* Body */}
+          <div className="px-6 py-4 overflow-y-auto">
+            {selectedItem && (
+              <div className="space-y-4">
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                    Title
+                  </h3>
+                  <p className="text-gray-600">
+                    {selectedItem.title}
+                  </p>
+                </div>
+                
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                    Description
+                  </h3>
+                  <p className="text-gray-600 whitespace-pre-wrap">
+                    {selectedItem.description}
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2 mt-4">
+                  <div className="flex items-center gap-1 px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-sm font-medium">
+                    <IconClock size={14} />
+                    <span>ID: {selectedItem.id}</span>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>,
+      document.body
+    );
+  };
+
   return (
     <div>
       <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-3">
@@ -72,7 +160,7 @@ export const ItemList: React.FC<ItemListProps> = ({
           <select
             value={sortOrder}
             onChange={(e) => onSortChange(e.target.value as 'asc' | 'desc')}
-            className="px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white cursor-pointer"
           >
             <option value="asc">Oldest First</option>
             <option value="desc">Latest First</option>
@@ -93,11 +181,12 @@ export const ItemList: React.FC<ItemListProps> = ({
             transition={{ duration: 0.3, delay: index * 0.1 }}
             whileHover={{ scale: 1.02 }}
             className="h-full"
+            onClick={(e) => handleItemClick(item, e)}
           >
             <Paper
               shadow="sm"
               radius="xl"
-              className="h-full flex flex-col justify-between hover:shadow-lg transition-shadow duration-200 overflow-hidden"
+              className="h-full flex flex-col justify-between hover:shadow-lg transition-shadow duration-200 overflow-hidden cursor-pointer"
               withBorder
             >
               <div className="p-5">
@@ -138,7 +227,10 @@ export const ItemList: React.FC<ItemListProps> = ({
                   variant="light"
                   color="blue"
                   size="sm"
-                  onClick={() => onEdit(item)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onEdit(item);
+                  }}
                   className="hover:scale-105 transition-transform duration-200 font-medium flex items-center gap-1"
                   styles={{
                     root: {
@@ -160,7 +252,10 @@ export const ItemList: React.FC<ItemListProps> = ({
                   variant="light"
                   color="red"
                   size="sm"
-                  onClick={() => onDelete(item.id)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onDelete(item.id);
+                  }}
                   className="hover:scale-105 transition-transform duration-200 font-medium flex items-center gap-1"
                   styles={{
                     root: {
@@ -184,6 +279,8 @@ export const ItemList: React.FC<ItemListProps> = ({
         ))}
       </div>
       
+      <CustomModal />
+
       {totalPages > 1 && (
         <div className="flex flex-wrap justify-center items-center gap-2 mt-6">
           <button
