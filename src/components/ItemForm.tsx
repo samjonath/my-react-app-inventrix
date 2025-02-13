@@ -55,7 +55,7 @@ export const ItemForm: React.FC<ItemFormProps> = ({ onSubmit, editingItem }) => 
     <form onSubmit={handleSubmit} className="max-w-lg mx-auto mb-8">
       <div className="mb-4">
         <label htmlFor="title" className="block text-gray-700 font-bold mb-2">
-          Title
+          Title <span className="text-red-500">*</span>
         </label>
         <div className="relative">
           <input
@@ -65,6 +65,7 @@ export const ItemForm: React.FC<ItemFormProps> = ({ onSubmit, editingItem }) => 
             onChange={handleTitleChange}
             className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
+            placeholder="Enter title"
           />
           <div className="absolute right-2 bottom-2 text-sm text-gray-500">
             {title.length}/{TITLE_MAX_LENGTH}
@@ -76,7 +77,7 @@ export const ItemForm: React.FC<ItemFormProps> = ({ onSubmit, editingItem }) => 
       </div>
       <div className="mb-4">
         <label htmlFor="description" className="block text-gray-700 font-bold mb-2">
-          Description
+          Description <span className="text-red-500">*</span>
         </label>
         <div className="relative">
           <textarea
@@ -85,6 +86,7 @@ export const ItemForm: React.FC<ItemFormProps> = ({ onSubmit, editingItem }) => 
             onChange={handleDescriptionChange}
             className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[100px]"
             required
+            placeholder="Enter description"
           />
           <div className="absolute right-2 bottom-2 text-sm text-gray-500">
             {description.length}/{DESCRIPTION_MAX_LENGTH}
@@ -96,7 +98,7 @@ export const ItemForm: React.FC<ItemFormProps> = ({ onSubmit, editingItem }) => 
       </div>
       <button
         type="submit"
-        className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600"
+        className="w-full bg-gray-900 text-gray-100 py-2 px-4 rounded-lg hover:bg-gray-800 transition-colors duration-200 border border-gray-700/50"
       >
         {editingItem ? 'Update Item' : 'Add Item'}
       </button>

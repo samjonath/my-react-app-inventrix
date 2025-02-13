@@ -185,53 +185,51 @@ export const ItemList: React.FC<ItemListProps> = ({
           >
             <Paper
               shadow="sm"
-              radius="xl"
-              className="h-full flex flex-col justify-between hover:shadow-lg transition-shadow duration-200 overflow-hidden cursor-pointer"
+              className="h-full flex flex-col justify-between hover:shadow-lg transition-shadow duration-200 overflow-hidden cursor-pointer bg-gray-900 border border-gray-700/50 rounded-2xl"
               withBorder
             >
               <div className="p-5">
                 <div className="flex items-start justify-between gap-3 mb-3">
                   <Title 
                     order={3} 
-                    className="line-clamp-1 text-lg font-semibold flex-1"
+                    className="line-clamp-1 text-lg font-semibold flex-1 text-gray-100"
                     style={{ minWidth: 0 }}
                   >
                     {item.title}
                   </Title>
-                  <Badge 
-                    color="blue" 
-                    variant="light"
-                    size="lg"
-                    className="whitespace-nowrap flex-shrink-0"
+                  <span className="text-gray-400">{"#" + item.id}</span>
+                  {/* <Badge 
+                    color="gray" 
+                    variant="transparent"
+                    size="sm"
+                    className="whitespace-nowrap flex-shrink-0 bg-gray-800 text-gray-300 border border-gray-700"
                     leftSection={
                       <div className="ml-1">
-                        <IconClock size={14} />
+                        <IconClock size={14} className="text-gray-400" />
                       </div>
                     }
                   >
                     ID: {item.id}
-                  </Badge>
+                  </Badge> */}
                 </div>
 
                 <Text 
-                  c="dimmed" 
                   size="sm" 
-                  className="line-clamp-3"
+                  className="line-clamp-3 text-gray-400"
                 >
                   {item.description}
                 </Text>
               </div>
 
-              <div className="px-5 pb-4 pt-2 flex justify-end gap-2 mt-auto">
+              <div className="px-5 pb-4 pt-2 flex justify-end gap-2 mt-auto border-t border-gray-800">
                 <Button
-                  variant="light"
-                  color="blue"
+                  variant="subtle"
                   size="sm"
                   onClick={(e) => {
                     e.stopPropagation();
                     onEdit(item);
                   }}
-                  className="hover:scale-105 transition-transform duration-200 font-medium flex items-center gap-1"
+                  className="hover:scale-105 transition-transform duration-200 font-medium flex items-center gap-1 hover:bg-gray-800"
                   styles={{
                     root: {
                       display: 'inline-flex',
@@ -244,19 +242,18 @@ export const ItemList: React.FC<ItemListProps> = ({
                       gap: '4px',
                     },
                   }}
-                  leftSection={<IconEdit size={16} style={{ color: '#228BE6' }} />}
+                  leftSection={<IconEdit size={16} style={{ color: '#E5E7EB' }} />}
                 >
-                  <span style={{ color: '#228BE6' }}>Edit</span>
+                  <span className="text-gray-300">Edit</span>
                 </Button>
                 <Button
-                  variant="light"
-                  color="red"
+                  variant="subtle"
                   size="sm"
                   onClick={(e) => {
                     e.stopPropagation();
                     onDelete(item.id);
                   }}
-                  className="hover:scale-105 transition-transform duration-200 font-medium flex items-center gap-1"
+                  className="hover:scale-105 transition-transform duration-200 font-medium flex items-center gap-1 hover:bg-gray-800"
                   styles={{
                     root: {
                       display: 'inline-flex',
@@ -269,9 +266,9 @@ export const ItemList: React.FC<ItemListProps> = ({
                       gap: '4px',
                     },
                   }}
-                  leftSection={<IconTrash size={16} style={{ color: '#FA5252' }} />}
+                  leftSection={<IconTrash size={16} style={{ color: '#9CA3AF' }} />}
                 >
-                  <span style={{ color: '#FA5252' }}>Delete</span>
+                  <span className="text-gray-400">Delete</span>
                 </Button>
               </div>
             </Paper>
@@ -303,7 +300,7 @@ export const ItemList: React.FC<ItemListProps> = ({
                   onClick={() => onPageChange(pageNum as number)}
                   className={`px-2 py-1 sm:px-4 sm:py-2 rounded text-sm ${
                     currentPage === pageNum
-                      ? 'bg-blue-500 text-white'
+                      ? 'bg-gray-900 text-white'
                       : 'bg-gray-200'
                   }`}
                 >

@@ -5,7 +5,7 @@ import { SuccessModal } from './components/SuccessModal';
 import { api } from './services/api';
 import { Item } from './types';
 import { MantineProvider, createTheme, HoverCard, Text } from '@mantine/core';
-import { IconBoxSeam, IconInfoCircle } from '@tabler/icons-react';
+import { IconBoxSeam, IconInfoCircle, IconNotes } from '@tabler/icons-react';
 
 const theme = createTheme({});
 
@@ -146,7 +146,12 @@ function App() {
     <MantineProvider theme={theme}>
       <div className="min-h-screen bg-gray-100 py-8 px-4">
         <div className="max-w-6xl mx-auto relative">
-          <div className="absolute top-0 right-0 z-50">
+          <div className="mb-8 flex items-center justify-between">
+            <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
+              <IconNotes className="text-gray-800" size={32} stroke={1.5} />
+              <span>Notes</span>
+            </h1>
+            
             <div 
               className="relative"
               onMouseEnter={() => setShowTooltip(true)}
@@ -155,14 +160,14 @@ function App() {
               <div className="cursor-help">
                 <IconInfoCircle
                   size={24}
-                  className="text-blue-500 hover:text-blue-600 transition-colors"
+                  className="text-gray-700 hover:text-gray-900 transition-colors"
                   stroke={1.5}
                 />
               </div>
               
               {showTooltip && (
                 <div 
-                  className="absolute right-0 mt-2 w-64 p-3 bg-white rounded-lg shadow-lg border border-gray-200 z-50"
+                  className="absolute right-0 mt-2 w-64 p-3 bg-gray-900 rounded-lg shadow-lg border border-gray-700/50 z-50"
                   style={{
                     transform: 'translateY(8px)'
                   }}
@@ -170,10 +175,10 @@ function App() {
                   <div className="flex items-start gap-2">
                     <IconInfoCircle 
                       size={20} 
-                      className="text-blue-500 flex-shrink-0 mt-0.5" 
+                      className="text-gray-400 flex-shrink-0 mt-0.5" 
                       stroke={1.5}
                     />
-                    <p className="text-sm text-gray-700 leading-snug">
+                    <p className="text-sm text-gray-300 leading-snug">
                       Can't edit newly added items since we are working with mock APIs
                     </p>
                   </div>
@@ -181,22 +186,7 @@ function App() {
               )}
             </div>
           </div>
-          
-          <div className="flex items-center justify-center gap-3 mb-8">
-            <IconBoxSeam 
-              size={40} 
-              className="text-blue-500 animate-bounce-slow"
-              stroke={1.5}
-            />
-            <h1 className="text-3xl font-bold text-center bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
-              Inventrix
-            </h1>
-          </div>
-          {error && (
-            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-              {error}
-            </div>
-          )}
+
           <ItemForm onSubmit={handleSubmit} editingItem={editingItem} />
           <ItemList
             items={items}
