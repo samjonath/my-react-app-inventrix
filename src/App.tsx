@@ -14,7 +14,7 @@ function App() {
   const [editingItem, setEditingItem] = useState<Item | undefined>();
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const itemsPerPage = 6; // You can adjust this number
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
@@ -26,7 +26,7 @@ function App() {
   const fetchItems = async () => {
     try {
       const data = await api.getItems();
-      setItems(data);
+      setItems(sortItems(data, 'asc'));
     } catch (err) {
       setError('Failed to fetch items');
     }

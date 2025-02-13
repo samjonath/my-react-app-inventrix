@@ -74,8 +74,8 @@ export const ItemList: React.FC<ItemListProps> = ({
             onChange={(e) => onSortChange(e.target.value as 'asc' | 'desc')}
             className="px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <option value="desc">Latest First</option>
             <option value="asc">Oldest First</option>
+            <option value="desc">Latest First</option>
           </select>
         </div>
         
