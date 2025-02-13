@@ -150,6 +150,7 @@ function App() {
             <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
               <IconNotes className="text-gray-800" size={32} stroke={1.5} />
               <span>Notes</span>
+              <span className="text-gray-500 ">/ sam jonath </span>
             </h1>
             
             <div 
