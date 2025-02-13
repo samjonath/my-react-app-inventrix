@@ -50,21 +50,11 @@ A modern, responsive notes application built with React, TypeScript, and Mantine
 
 5. Open [http://localhost:3000](http://localhost:3000) to view it in your browser
 
-## Project Structure
-
-src/
-├── components/ # React components
-│ ├── ItemForm.tsx # Form for creating/editing notes
-│ └── ItemList.tsx # List view of notes with pagination
-├── types/ # TypeScript type definitions
-├── App.tsx # Main application component
-└── index.tsx # Application entry point
-
 ## License
 
 This project is licensed under the MIT License
 
 ## Contact
 
-Your Name - [@yourtwitter](https://twitter.com/yourtwitter)
-Project Link: [https://github.com/yourusername/notes-app](https://github.com/yourusername/notes-app)
+Your Name - [@samjonath](https://github.com/samjonath/)
+Project Link: [github](https://github.com/samjonath/my-react-app-inventrix)
